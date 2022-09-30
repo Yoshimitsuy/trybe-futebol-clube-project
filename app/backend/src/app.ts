@@ -1,4 +1,7 @@
 import * as express from 'express';
+import LoginController from './controllers/loginController';
+import validateLogin from './middlewares/validateLogin';
+import validateToken from './middlewares/validateToken';
 
 class App {
   public app: express.Express;
@@ -22,6 +25,10 @@ class App {
 
     this.app.use(express.json());
     this.app.use(accessControl);
+
+    const loginController = new LoginController();
+    this.app.post('/login', validateLogin, loginController.login);
+    this.app.get('/login/validate', validateToken, loginController.validate);
   }
 
   public start(PORT: string | number):void {
