@@ -16,7 +16,7 @@ class LoginService {
     }
 
     const compare = await bcrypt.compare(password, user.password);
-    console.log('AQUIIIIIIIIIIIIIIIII', compare);
+    // console.log('AQUIIIIIIIIIIIIIIIII', compare);
 
     if (!compare) {
       throw new Error('Incorrect email or password');

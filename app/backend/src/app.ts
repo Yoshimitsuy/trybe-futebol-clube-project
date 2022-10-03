@@ -1,5 +1,6 @@
 import * as express from 'express';
 import LoginController from './controllers/loginController';
+import TeamController from './controllers/teamController';
 import validateLogin from './middlewares/validateLogin';
 import validateToken from './middlewares/validateToken';
 
@@ -27,8 +28,13 @@ class App {
     this.app.use(accessControl);
 
     const loginController = new LoginController();
+    const teamController = new TeamController();
+
     this.app.post('/login', validateLogin, loginController.login);
     this.app.get('/login/validate', validateToken, loginController.validate);
+
+    this.app.get('/teams', teamController.findAll);
+    this.app.get('/teams/:id', teamController.findByPk);
   }
 
   public start(PORT: string | number):void {
