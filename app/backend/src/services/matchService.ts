@@ -1,3 +1,4 @@
+import { MatchType } from '../types/matchTypes';
 import matchModel from '../database/models/matchModel';
 import teamModel from '../database/models/teamModel';
 
@@ -11,6 +12,12 @@ class MatchService {
         { model: teamModel, as: 'teamAway', attributes: { exclude: ['id'] } },
       ],
     });
+
+    return data;
+  };
+
+  create = async (match: MatchType) => {
+    const data = await this.model.create(match);
 
     return data;
   };

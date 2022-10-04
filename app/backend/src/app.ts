@@ -39,6 +39,7 @@ class App {
     this.app.get('/teams/:id', teamController.findByPk);
 
     this.app.get('/matches', matchController.getAll);
+    this.app.post('/matches', validateToken, matchController.create);
   }
 
   public start(PORT: string | number):void {
