@@ -12,8 +12,18 @@ chai.use(chaiHttp);
 
 const { expect } = chai;
 
-const dumpUser = { email: 'user@user.com', password: 'secret_password' };
-const dumpUserBlankEmail = { email: '', password: 'secret_password' };
+// mocks
+const dumpUser = { email: 'user@user.com', password: 'secret_user' };
+const dumpUserBlankEmail = { email: '', password: 'secret_user' };
+const dumpUserWrongEmail = { email: 'pedrin@bala', password: 'secret_user' };
+const mock = {
+  id: 2,
+  username: 'User',
+  role: 'user',
+  email: 'user@user.com',
+  password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO', 
+    // senha: secret_user
+};
 
 describe('login route', () => {
   let chaiHttpResponse: Response;
@@ -21,7 +31,7 @@ describe('login route', () => {
   before(async () => {
     sinon
       .stub(User, 'findOne')
-      .resolves({ } as User);
+      .resolves(mock as User);
   }); // rev. testes de integração
 
   after(()=>{
@@ -41,7 +51,7 @@ describe('login route', () => {
       expect(chaiHttpResponse).to.have.status(200);
     });
 
-    it('returns token', async () => {  
+    it('token', async () => {  
       expect(chaiHttpResponse.body).to.have.property('token');
     });
   })
@@ -58,13 +68,20 @@ describe('login route', () => {
     it('returns code 400', async () => {
       expect(chaiHttpResponse).to.have.status(400);
     });
-
-    // it('', async () => {  
-    //   expect(chaiHttpResponse).to.have.property('');
-    // });
   })
 
-  it('Seu sub-teste', () => {
-    expect(false).to.be.eq(true);
-  });
+  describe('POST /login wrong email', () => {
+
+    before(async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .send(dumpUserWrongEmail);
+    });
+
+    it('returns code 400', async () => {
+      expect(chaiHttpResponse).to.have.status(400);
+    });
+  })
+
 });
