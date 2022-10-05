@@ -13,17 +13,13 @@ chai.use(chaiHttp);
 const { expect } = chai;
 
 // mocks
-// const dumpUser = { email: 'user@user.com', password: 'secret_user' };
-// const dumpUserBlankEmail = { email: '', password: 'secret_user' };
-// const dumpUserWrongEmail = { email: 'pedrin@bala', password: 'secret_user' };
-// const mock = {
-//   id: 2,
-//   username: 'User',
-//   role: 'user',
-//   email: 'user@user.com',
-//   password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO', 
-//     // senha: secret_user
-// };
+const dumpUser = { email: 'user@user.com', password: 'secret_user' };
+const dumpMatch = {
+  homeTeam: 100,
+  awayTeam: 16,
+  homeTeamGoals: 2,
+  awayTeamGoals: 2,
+}
 
 describe('matches route', () => {
   let chaiHttpResponse: Response;
@@ -54,5 +50,35 @@ describe('matches route', () => {
       expect(chaiHttpResponse.body).to.be.an('array');
     });
 
+    it('returns teams names', async () => {  
+      expect(chaiHttpResponse.body[0]).to.have.property('teamHome');
+      expect(chaiHttpResponse.body[0]).to.have.property('teamAway');
+    });
+
   })
+
+  describe('POST /matches', () => {
+    let validateLogin: Response;
+    before(async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .send(dumpUser);
+
+     validateLogin = await chai
+     .request(app)
+     .post('/matches')
+     .set('authorization', chaiHttpResponse.body.token)
+     .send(dumpMatch);
+    });
+
+    it('returns code 404', async () => {
+      expect(validateLogin).to.have.status(404);
+    });
+    it('returns message', async () => {
+      expect(validateLogin.body).to.have.property('message');
+    });
+  })
+
+
 });
