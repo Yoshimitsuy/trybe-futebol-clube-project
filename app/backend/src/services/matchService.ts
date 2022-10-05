@@ -21,6 +21,12 @@ class MatchService {
 
     return data;
   };
+
+  update = async (id: string) => {
+    const data = await this.model.update({ inProgress: false }, { where: { id } });
+
+    return data;
+  };
 }
 
 export default MatchService;

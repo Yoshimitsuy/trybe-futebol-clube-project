@@ -81,7 +81,31 @@ describe('login route', () => {
 
     it('returns code 400', async () => {
       expect(chaiHttpResponse).to.have.status(400);
+      expect(chaiHttpResponse.body).to.be.a('object');
+      expect(chaiHttpResponse.body).to.have.property('message');
+      expect(chaiHttpResponse.body.message).to.be.equal('All fields must be filled');
     });
+
+
+  })
+
+  describe('GET /login/validate valid user', () => {
+    before(async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .post('/login')
+      .send(dumpUser);
+    });
+
+    it('returns status code 200', async () => {
+      let validUser = await chai
+      .request(app)
+      .get('/login/validate')
+      .set('authorization', chaiHttpResponse.body.token);
+
+      expect(validUser).to.have.status(200);
+    });
+
   })
 
 });

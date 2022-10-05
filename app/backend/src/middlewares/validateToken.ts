@@ -15,7 +15,7 @@ const validateToken = (req: Request, res: Response, next: NextFunction) => {
 
     res.locals.user = decode;
   } catch (error) {
-    return res.status(401).json({ message: 'invalid token' });
+    return res.status(401).json({ message: 'Token must be a valid token' });
   }
   next();
 };

@@ -40,6 +40,8 @@ class App {
 
     this.app.get('/matches', matchController.getAll);
     this.app.post('/matches', validateToken, matchController.create);
+
+    this.app.patch('/matches/:id/finish', matchController.update);
   }
 
   public start(PORT: string | number):void {
