@@ -17,6 +17,16 @@ class MatchService {
   };
 
   create = async (match: MatchType) => {
+    if (match.homeTeam === match.awayTeam) {
+      throw new Error('It is not possible to create a match with two equal teams');
+    }
+
+    const home = await this.model.findByPk(match.homeTeam);
+    const away = await this.model.findByPk(match.awayTeam);
+
+    if (!home || !away) {
+      throw new Error('There is no team with such id!');
+    }
     const data = await this.model.create(match);
 
     return data;

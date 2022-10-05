@@ -10,9 +10,15 @@ class MatchController {
   };
 
   create: RequestHandler = async (req, res) => {
-    const matchCreated = await this.service.create(req.body);
-
-    return res.status(201).json(matchCreated);
+    try {
+      const matchCreated = await this.service.create(req.body);
+      return res.status(201).json(matchCreated);
+    } catch ({ message }) {
+      if (message === 'There is no team with such id!') {
+        return res.status(404).json({ message });
+      }
+      return res.status(401).json({ message });
+    }
   };
 
   update: RequestHandler = async (req, res) => {
