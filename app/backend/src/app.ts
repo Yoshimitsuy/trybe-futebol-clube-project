@@ -1,9 +1,12 @@
 import * as express from 'express';
-import LoginController from './controllers/loginController';
-import MatchController from './controllers/matchController';
-import TeamController from './controllers/teamController';
-import validateLogin from './middlewares/validateLogin';
-import validateToken from './middlewares/validateToken';
+// import LoginController from './controllers/loginController';
+// import MatchController from './controllers/matchController';
+// import TeamController from './controllers/teamController';
+// import validateLogin from './middlewares/validateLogin';
+// import validateToken from './middlewares/validateToken';
+import loginRoutes from './routes/loginRoutes';
+import teamRoutes from './routes/teamRoutes';
+import matchRoutes from './routes/matchRoutes';
 
 class App {
   public app: express.Express;
@@ -13,6 +16,9 @@ class App {
 
     this.config();
 
+    this.app.use('/login', loginRoutes);
+    this.app.use('/teams', teamRoutes);
+    this.app.use('/matches', matchRoutes);
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
   }
@@ -28,20 +34,20 @@ class App {
     this.app.use(express.json());
     this.app.use(accessControl);
 
-    const loginController = new LoginController();
-    const teamController = new TeamController();
-    const matchController = new MatchController();
+    // const loginController = new LoginController();
+    // const teamController = new TeamController();
+    // const matchController = new MatchController();
 
-    this.app.post('/login', validateLogin, loginController.login);
-    this.app.get('/login/validate', validateToken, loginController.validate);
+    // this.app.post('/login', validateLogin, loginController.login);
+    // this.app.get('/login/validate', validateToken, loginController.validate);
 
-    this.app.get('/teams', teamController.findAll);
-    this.app.get('/teams/:id', teamController.findByPk);
+    // this.app.get('/teams', teamController.findAll);
+    // this.app.get('/teams/:id', teamController.findByPk);
 
-    this.app.get('/matches', matchController.getAll);
-    this.app.post('/matches', validateToken, matchController.create);
+    // this.app.get('/matches', matchController.getAll);
+    // this.app.post('/matches', validateToken, matchController.create);
 
-    this.app.patch('/matches/:id/finish', matchController.update);
+    // this.app.patch('/matches/:id/finish', matchController.update);
   }
 
   public start(PORT: string | number):void {
