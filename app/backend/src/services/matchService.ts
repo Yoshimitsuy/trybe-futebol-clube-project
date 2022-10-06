@@ -1,4 +1,4 @@
-import { MatchType } from '../types/matchTypes';
+import { MatchType, MatchUpdateType } from '../types/matchTypes';
 import matchModel from '../database/models/matchModel';
 import teamModel from '../database/models/teamModel';
 
@@ -36,6 +36,17 @@ class MatchService {
     const data = await this.model.update({ inProgress: false }, { where: { id } });
 
     return data;
+  };
+
+  updateId = async (id: string, up: MatchUpdateType) => {
+    const data = await this.model.findByPk(id);
+    if (!data) throw new Error('not found');
+
+    const { homeTeamGoals, awayTeamGoals } = up;
+    await this.model.update(
+      { homeTeamGoals, awayTeamGoals },
+      { where: { id } },
+    );
   };
 }
 

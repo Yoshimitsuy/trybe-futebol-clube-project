@@ -27,6 +27,12 @@ class MatchController {
 
     return res.status(200).json({ message: 'Finished' });
   };
+
+  updateId: RequestHandler = async (req, res) => {
+    const { id } = req.params;
+    await this.service.updateId(id, req.body);
+    return res.status(200).json({ message: 'GOLAÇOOOOO' });
+  };
 }
 
 export default MatchController;
